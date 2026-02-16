@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from .forms import CommentForm, PostForm
-from .models import Comment, Post
+from .models import Category, Comment, Post
 
 
 def post_list(request):
@@ -96,3 +96,14 @@ def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('post_detail', pk=comment.post.pk)
+
+
+def category_post_list(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+
+    posts = Post.objects.filter(
+        category=category,
+        published_date__lte=timezone.now()
+    ).order_by('-published_date')
+
+    return render(request, 'blog/post_list.html', {'posts': posts, 'current_category': category})

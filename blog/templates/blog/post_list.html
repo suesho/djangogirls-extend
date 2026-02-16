@@ -7,6 +7,9 @@
                 {{ post.published_date }}
             </div>
             <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+            {% if post.category %}
+                <p><strong>カテゴリ:</strong> <a href="{% url 'category_post_list' pk=post.category.pk %}">{{ post.category.name }}</a></p>
+            {% endif %}
             <p>{{ post.text|linebreaksbr }}</p>
             <a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a>
         </div>

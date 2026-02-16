@@ -29,6 +29,20 @@
                 {% block content %}
                 {% endblock %}
                 </div>
+                <div class="col-md-4">
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            カテゴリ
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for category in categories %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'category_post_list' pk=category.pk %}">{{ category.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
