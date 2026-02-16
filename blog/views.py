@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -8,9 +9,23 @@ from .models import Comment, Post
 
 
 def post_list(request):
+    # 公開済みの記事をすべて取得する
     posts = Post.objects.filter(
         published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+
+    # URLから検索キーワード（q）を受け取る
+    query = request.GET.get('q')
+
+    # もしキーワードが入力されていたら、絞り込み（フィルタリング）を実行
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) | Q(text__icontains=query)
+        )
+
+    return render(request, 'blog/post_list.html', {
+        'posts': posts,
+        'query': query  # 何で検索したかを検索ボックスに残してあげるために設定
+    })
 
 
 @login_required
