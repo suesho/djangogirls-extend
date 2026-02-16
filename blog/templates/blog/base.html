@@ -26,8 +26,24 @@
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
-                {% block content %}
-                {% endblock %}
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-4">
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            最新の記事
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for post in latest_posts %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a>
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item">記事がありません</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
